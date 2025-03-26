@@ -1,0 +1,44 @@
+1 - Instalar MySQL
+2 - Criar um banco de dados
+3 - Criar tabelas (package script -> tabelas.sql)
+4 - Configurar banco de dados no package resources -> META-INF -> persistence.xml
+5 - Aba Maven -> Reload All Maven Projects (isso irá criar a pasta utilizada no passo 6)
+6 - Adicionar package Console em C:\Users\[nome de usuário]\.m2\repository\corejava\console\1.0
+7 - Build Project
+
+7 - Data Access Object (padrão de projetos de acesso a dados) = DAO
+8 - dao -> ProdutoDAO é uma interface / dao -> impl -> JPAProdutoDAO é a classe que implementa ProdutoDAO utilizando JPA
+9 - GetDAO recebe  retorna um objeto de uma classe que implementa aquela interface (retorna JPAProdutoDAO)
+
+10 - ProdutoDAO.class aponta para a interface do produto DAO em memória
+11 - Produto com id null = produto ainda não cadastrado no banco de dados = objeto transiente
+12 - Em tempo de execução o método inclui é de JPAProdutoDAO
+13 - Em tempo de compilação o método inclui é de ProdutoDAO
+
+import com.carlosribeiro.dao.impl.JPAProdutoDAO;
+// ProdutoDAO produtoDAO = FabricaDeDAOs.getDAO(ProdutoDAO.class);
+ProdutoDAO produtoDAO = new JPAProdutoDAO();
+
+JPA mapeia classes em tabelas
+
+@Entity notação em classes de domínio do problema
+@Table(name="produto") define o nome da tabela
+
+id sempre será do tipo classe
+
+Tipo Long = classe = id null
+Tipo long = tipo = id 0
+Produto com id = 0 -> objeto destacado = já está no banco de dados
+
+Definir atributos da classe
+Definir get e set de todos os atributos
+
+Pesquisar sobre @Transient
+Método criado na classe de domínio mas que não se deseja criar uma coluna no banco de dados
+
+14 - Programar método inclui de ProdutoDAO
+
+Ctrl + / -> Comentar/Descomentar linha
+
+Dependência reflections
+Afeta FabricadeDAOs
