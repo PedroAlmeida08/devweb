@@ -1,3 +1,55 @@
+Java Persistence API (JPA)
+A JPA é uma especificação para mapeamento objeto-relacional (ORM) em Java, permitindo que objetos Java sejam persistidos e recuperados de bancos de dados relacionais. Ela define as regras e práticas para a persistência de dados, mas não fornece uma implementação concreta.
+
+Hibernate
+O Hibernate é uma implementação da JPA e uma solução de mapeamento objeto-relacional para ambientes Java. Ele mapeia objetos do modelo para tabelas em bancos de dados relacionais, sendo uma das implementações mais populares da JPA.
+
+Spring Data JPA
+O Spring Data JPA é parte do framework Spring e simplifica a implementação da camada de acesso a dados. Ele adiciona uma camada de abstração sobre a JPA, facilitando a criação de repositórios e reduzindo o código necessário para interagir com o banco de dados. Não é uma implementação da JPA, mas sim uma biblioteca que usa implementações como o Hibernate.
+
+SLF4J (Simple Logging Facade for Java)
+O SLF4J é uma camada de abstração para logging, permitindo que você utilize diferentes bibliotecas de logging (como Log4j, LOGBACK, etc.) sem se preocupar com a implementação específica usada. Ele oferece flexibilidade na escolha da biblioteca de logging sem modificar o código.
+
+Processo para Configuração e Implementação
+Instalar MySQL e criar um banco de dados.
+
+Criar tabelas com um script SQL em package script -> tabelas.sql.
+
+Configurar o banco de dados em META-INF -> persistence.xml.
+
+No Maven, recarregar todos os projetos para gerar a pasta necessária.
+
+Adicionar o package Console em C:\Users\[usuário]\.m2\repository\corejava\console\1.0.
+
+Build Project para construir o projeto.
+
+DAO (Data Access Object)
+O padrão DAO é utilizado para separar a lógica de acesso a dados da lógica de negócios. Exemplo:
+
+ProdutoDAO é a interface.
+
+JPAProdutoDAO é a implementação da interface utilizando JPA.
+
+O método GetDAO retorna um objeto que implementa a interface, como o JPAProdutoDAO.
+
+Mapeamento de Entidades com JPA
+@Entity é a anotação que mapeia uma classe de domínio para uma tabela.
+
+@Table(name="produto") define o nome da tabela no banco de dados.
+
+@Id é a anotação que define o identificador (ID) da entidade.
+
+A diferença entre Long (classe) e long (tipo primitivo) é que o Long pode ser null, enquanto o long não pode.
+
+Método Transiente
+A anotação @Transient pode ser usada em métodos ou campos para indicar que eles não devem ser persistidos no banco de dados.
+
+Programação do Método inclui
+A implementação do método inclui na classe JPAProdutoDAO vai persistir o objeto Produto. Isso ocorre em tempo de execução, enquanto o método é definido na interface ProdutoDAO em tempo de compilação.
+
+Dependência Reflection
+A dependência reflections pode ser usada para facilitar a criação de DAOs dinâmicos, afetando a fábrica de DAOs
+
 1 - Instalar MySQL
 2 - Criar um banco de dados
 3 - Criar tabelas (package script -> tabelas.sql)
