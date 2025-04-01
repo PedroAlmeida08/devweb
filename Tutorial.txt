@@ -1,96 +1,85 @@
-Java Persistence API (JPA)
-A JPA é uma especificação para mapeamento objeto-relacional (ORM) em Java, permitindo que objetos Java sejam persistidos e recuperados de bancos de dados relacionais. Ela define as regras e práticas para a persistência de dados, mas não fornece uma implementação concreta.
+JPAProdutoDAO = ProdutoDAOImpl
 
-Hibernate
-O Hibernate é uma implementação da JPA e uma solução de mapeamento objeto-relacional para ambientes Java. Ele mapeia objetos do modelo para tabelas em bancos de dados relacionais, sendo uma das implementações mais populares da JPA.
+Em tempo de compilação, método inclui de ProdutoDAO(Interface)
 
-Spring Data JPA
-O Spring Data JPA é parte do framework Spring e simplifica a implementação da camada de acesso a dados. Ele adiciona uma camada de abstração sobre a JPA, facilitando a criação de repositórios e reduzindo o código necessário para interagir com o banco de dados. Não é uma implementação da JPA, mas sim uma biblioteca que usa implementações como o Hibernate.
+Em tempo de execução, método inclui de JPAProdutoDAO
 
-SLF4J (Simple Logging Facade for Java)
-O SLF4J é uma camada de abstração para logging, permitindo que você utilize diferentes bibliotecas de logging (como Log4j, LOGBACK, etc.) sem se preocupar com a implementação específica usada. Ele oferece flexibilidade na escolha da biblioteca de logging sem modificar o código.
+Da forma em que estamos programando, as transações são criadas e destruídas após a execução de cada método.
 
-Processo para Configuração e Implementação
-Instalar MySQL e criar um banco de dados.
+1) Criar um entity manager (FabricadeEntityManager)
+em = FabricaDeEntityManager.criarEntityManager();
 
-Criar tabelas com um script SQL em package script -> tabelas.sql.
+Entity Manager contém uma lista dos objetos monitorados
 
-Configurar o banco de dados em META-INF -> persistence.xml.
+2) Criar um objeto que cria uma transação ou recupera uma existente
+tx = em.getTransaction();
+Entity Manager cria a transação
 
-No Maven, recarregar todos os projetos para gerar a pasta necessária.
+3) Iniciar transação (envia um begin transaction para o SGBD)
+tx.begin();
+Entity Manager inicia a transação
 
-Adicionar o package Console em C:\Users\[usuário]\.m2\repository\corejava\console\1.0.
+4) Salva o objeto no BD
+em.persist(umProduto);
+Entity Manager verifica se o objeto é transiente (Id = null), cc, erro, pois objeto é destacado (Id != null). Id != null => objeto já inserido no BD.
 
-Build Project para construir o projeto.
+Em um SGBD que usa sequence (não é o caso do MySQL - PostGRE e Oracle)
+- Recupera o próximo valor da sequence
+- Atribui valor ao Id
+- Nesse momento o objeto passa a ser um objeto persistente (Id != null)
+- Adiciona o produto à lista de objetos monitorados pelo entity manager
+- Agenda a execução do comando INSERT (executado no momento do commit)
 
-DAO (Data Access Object)
-O padrão DAO é utilizado para separar a lógica de acesso a dados da lógica de negócios. Exemplo:
+5) Commita a transação
+tx.commit();
 
-ProdutoDAO é a interface.
+Em um SGBD que não usa sequence (MySQL)
+- Executa o comando INSERT
+- Atribui valor da coluna Id ao Id do objeto
+- Adiciona o produto à lista de objetos monitorados pelo entity manager
+- Commita
 
-JPAProdutoDAO é a implementação da interface utilizando JPA.
+6) Retorna o Id do produto
+return umProduto.getId();
 
-O método GetDAO retorna um objeto que implementa a interface, como o JPAProdutoDAO.
+7) Se a transação foi criada mas houve um erro, efetua rollback
+tx.rollback();
 
-Mapeamento de Entidades com JPA
-@Entity é a anotação que mapeia uma classe de domínio para uma tabela.
+8) Destrói o Entity Manager
+em.close();
 
-@Table(name="produto") define o nome da tabela no banco de dados.
+Se o Entity Manager fosse criado como variável estática e não fosse destruído:
+- No momento do persist, como o objeto está salvo na lista de objetos monitorados pelo entity manager, irá tentar realizar os comandos de uptade mesmo que o objeto já tenha sido excluído => erro!
 
-@Id é a anotação que define o identificador (ID) da entidade.
+BD <-> Controller <-> Service <-> DAO
 
-A diferença entre Long (classe) e long (tipo primitivo) é que o Long pode ser null, enquanto o long não pode.
+9) Executar código e cadastrar produto ("aaa", 1000, 12/12/2012);
 
-Método Transiente
-A anotação @Transient pode ser usada em métodos ou campos para indicar que eles não devem ser persistidos no banco de dados.
+Criação do Entity Manager é rápida, mas a criação da FabricaDeEntityManager é demorada e, por isso, há lentidão na primeira execução do código.
 
-Programação do Método inclui
-A implementação do método inclui na classe JPAProdutoDAO vai persistir o objeto Produto. Isso ocorre em tempo de execução, enquanto o método é definido na interface ProdutoDAO em tempo de compilação.
+Current profile has no WMI enabled
 
-Dependência Reflection
-A dependência reflections pode ser usada para facilitar a criação de DAOs dinâmicos, afetando a fábrica de DAOs
+--------------------------------------------------------------------------------------------------
 
-1 - Instalar MySQL
-2 - Criar um banco de dados
-3 - Criar tabelas (package script -> tabelas.sql)
-4 - Configurar banco de dados no package resources -> META-INF -> persistence.xml
-5 - Aba Maven -> Reload All Maven Projects (isso irá criar a pasta utilizada no passo 6)
-6 - Adicionar package Console em C:\Users\[nome de usuário]\.m2\repository\corejava\console\1.0
-7 - Build Project
+Método recuperaUmProduto:
 
-7 - Data Access Object (padrão de projetos de acesso a dados) = DAO
-8 - dao -> ProdutoDAO é uma interface / dao -> impl -> JPAProdutoDAO é a classe que implementa ProdutoDAO utilizando JPA
-9 - GetDAO recebe  retorna um objeto de uma classe que implementa aquela interface (retorna JPAProdutoDAO)
+int i = 10;
+Posição de memória cujo valor é 10
+Integer j = new Integer(10);
+Endereço do objeto que contém uma variável de instância cujo valor é 10
 
-10 - ProdutoDAO.class aponta para a interface do produto DAO em memória
-11 - Produto com id null = produto ainda não cadastrado no banco de dados = objeto transiente
-12 - Em tempo de execução o método inclui é de JPAProdutoDAO
-13 - Em tempo de compilação o método inclui é de ProdutoDAO
+Unboxing:
+int k = j
+Valor 10 é atribuído a k
 
-import com.carlosribeiro.dao.impl.JPAProdutoDAO;
-// ProdutoDAO produtoDAO = FabricaDeDAOs.getDAO(ProdutoDAO.class);
-ProdutoDAO produtoDAO = new JPAProdutoDAO();
+Produto.class aponta para um objeto na memória do tipo class que é a classe Produto na memória, que contém os valores das variáveis estáticas.
 
-JPA mapeia classes em tabelas
+Wrapper classes: int -> Integer
+		 long -> Long
+		 float -> Float
+		 double -> Double
+		 
+Não tem transação no método inclui, logo, também não há commit e nem rollback (não há catch).
 
-@Entity notação em classes de domínio do problema
-@Table(name="produto") define o nome da tabela
+Exceção explode na tela (sem ter feito rollback, diferente do método inclui que realiza o rollback e dps explode a exceção na tela).
 
-id sempre será do tipo classe
-
-Tipo Long = classe = id null
-Tipo long = tipo = id 0
-Produto com id = 0 -> objeto destacado = já está no banco de dados
-
-Definir atributos da classe
-Definir get e set de todos os atributos
-
-Pesquisar sobre @Transient
-Método criado na classe de domínio mas que não se deseja criar uma coluna no banco de dados
-
-14 - Programar método inclui de ProdutoDAO
-
-Ctrl + / -> Comentar/Descomentar linha
-
-Dependência reflections
-Afeta FabricadeDAOs

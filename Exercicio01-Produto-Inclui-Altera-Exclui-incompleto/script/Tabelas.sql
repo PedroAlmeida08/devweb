@@ -10,10 +10,6 @@ Download MySQL Community Server
 
 DROP TABLE if exists banco.produto;
 
-CREATE SCHEMA banco;
-
-USE banco;
-
 CREATE TABLE banco.produto (
   id INT NOT NULL AUTO_INCREMENT,
   nome VARCHAR(30) NOT NULL,
