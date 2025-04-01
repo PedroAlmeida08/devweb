@@ -8,6 +8,10 @@ Download MySQL Community Server
 - 5.7
 - 8.0 (atual)
 
+CREATE SCHEMA banco;
+ 
+USE banco;
+
 DROP TABLE if exists banco.produto;
 
 CREATE TABLE banco.produto (
