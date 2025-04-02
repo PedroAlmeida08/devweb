@@ -178,7 +178,6 @@ public class Principal
 //                  argumento e não retorna nada. Para que um valor seja aceito pelo Consumer
 //                  deve ser executado o método accept.
 
-
 //                  Utilizando method reference. Method references são expressões que possuem
 //                  o mesmo tratamento de expressões lambda, mas em vez de prover um corpo  à
 //                  expressão lambda, eles (os method references) referenciam um método existente
@@ -196,8 +195,8 @@ public class Principal
 					break;
 				}
 
-				case 5:
-				{	continua = false;
+				case 5: {
+					continua = false;
 					break;
 				}
 
