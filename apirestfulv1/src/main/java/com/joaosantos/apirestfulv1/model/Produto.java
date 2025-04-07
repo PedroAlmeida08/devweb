@@ -26,16 +26,20 @@ public class Produto {
     private String descricao;
     private boolean disponivel;
     private int qtdEstoque;
-
-    public BigDecimal getPreco() {
-        return preco;
-    }
-
-    public void setPreco(BigDecimal preco) {
-        this.preco = preco;
-    }
-
     private BigDecimal preco;
     private LocalDate dataCadastro;
     private String categoria;
+
+    public Produto(String imagem, String nome, String descricao,
+                   boolean disponivel, int qtdEstoque, BigDecimal preco,
+                   LocalDate dataCadastro, String categoria) {
+        this.imagem = imagem;
+        this.nome = nome;
+        this.descricao = descricao;
+        this.disponivel = disponivel;
+        this.qtdEstoque = qtdEstoque;
+        this.preco = preco;
+        this.dataCadastro = dataCadastro;
+        this.categoria = categoria;
+    }
 }
