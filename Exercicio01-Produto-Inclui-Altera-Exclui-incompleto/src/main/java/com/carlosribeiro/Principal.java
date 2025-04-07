@@ -1,21 +1,20 @@
 package com.carlosribeiro;
 
 import com.carlosribeiro.dao.ProdutoDAO;
-import com.carlosribeiro.dao.impl.JPAProdutoDAO;
 import com.carlosribeiro.excecao.ProdutoNaoEncontradoException;
 import com.carlosribeiro.modelo.Produto;
 import com.carlosribeiro.util.FabricaDeDAOs;
 import com.carlosribeiro.util.Util;
 import corejava.Console;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 public class Principal
 {	public static void main (String[] args) 
 	{
+
+		// Ctrl + Alt + O == Resolver problemas de import
+
 		// Logger logger = LoggerFactory.getLogger(Principal.class);
 		// logger.error("Mensagem de log emitida utilizando o LOG4J");
 		// fatal - error - warning - info - debug
@@ -25,8 +24,11 @@ public class Principal
 		String dataCadastro;
 		Produto umProduto;
 
-		// ProdutoDAO produtoDAO = FabricaDeDAOs.getDAO(ProdutoDAO.class);
-		ProdutoDAO produtoDAO = new JPAProdutoDAO();
+		// ProdutoDAO produtoDAO = new JPAProdutoDAO();
+
+		// Entra em dao.impl e procura por uma classe que implememente a interface ProdutoDAO (JPAProdutoDAO)
+		// Encontra a classe, cria um objeto do tipo ProdutoDAO e o retorna
+		ProdutoDAO produtoDAO = FabricaDeDAOs.getDAO(ProdutoDAO.class);
 
 		boolean continua = true;
 		while (continua)
