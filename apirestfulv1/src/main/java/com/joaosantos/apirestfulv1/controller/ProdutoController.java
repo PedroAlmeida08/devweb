@@ -39,4 +39,10 @@ public class ProdutoController{
         return produtoService.alterarProduto(produto);
     }
 
+    // Indica que esse método deve ser executado ao receber uma requisição do tipo DELETE
+    // feita para http://localhost:8080/produtos
+    @DeleteMapping("{idProduto}")
+    public void removerProduto(@PathVariable("idProduto") Long id){
+        ProdutoService.removerProduto(id);
+    }
 }

@@ -1,4 +1,7 @@
-// Controller encaminha requisição para Service que encaminha a requisição para Repository
+@DeleteMapping("{idProduto}")
+public void removerProduto(@PathVariable("idProduto") Long id){
+	ProdutoService.removerProduto(id);
+}
 
---> Instalar Postman
-1 - Cadastrar um produto (caju)
+public void removerProduto(Long id)
+produtoRepository.deleteById(id);

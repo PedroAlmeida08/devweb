@@ -16,7 +16,7 @@ public class ProdutoService{
     private ProdutoRepository produtoRepository;
 
     public List<Produto> recuperarProdutos(){
-        return produtoRepository.findAll();
+        return produtoRepository.recuperarProdutosComCategoria();
     }
 
     public Produto cadastrarProduto(Produto produto){
@@ -57,4 +57,14 @@ public class ProdutoService{
                         "Produto número: " + produto.getId() + " não encontrado!"));
         return produtoRepository.save(produto);
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void removerProduto(long id){
+        produtoRepository.deleteById(id);
+//        produtoRepository.deleteById(1L);
+//        if(true){
+//            throw new Exception("Deu erro!");
+//        }
+    }
+
 }

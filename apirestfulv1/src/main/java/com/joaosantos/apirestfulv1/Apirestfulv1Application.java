@@ -1,6 +1,8 @@
 package com.joaosantos.apirestfulv1;
 
+import com.joaosantos.apirestfulv1.model.Categoria;
 import com.joaosantos.apirestfulv1.model.Produto;
+import com.joaosantos.apirestfulv1.repository.CategoriaRepository;
 import com.joaosantos.apirestfulv1.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -18,6 +20,9 @@ public class Apirestfulv1Application implements CommandLineRunner {
 	@Autowired
 	private ProdutoRepository produtoRepository;
 
+	@Autowired
+	private CategoriaRepository categoriaRepository;
+
 	// .run() é um método CommandLineRunner e será utilizado para popular banco de dados
 	// .run() coloca no ar o servidor Tomcat
 	// .run() abre e lê as configurações presentes em resources.application.properties
@@ -27,6 +32,14 @@ public class Apirestfulv1Application implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+
+		Categoria frutas = new Categoria("Frutas");
+		categoriaRepository.save(frutas);
+		Categoria legumes = new Categoria("Legumes");
+		categoriaRepository.save(legumes);
+		Categoria verduras = new Categoria("Verduras");
+		categoriaRepository.save(verduras);
+
 		Produto produto = new Produto(
 				"abacate.png",
 				"Abacate",
@@ -35,7 +48,7 @@ public class Apirestfulv1Application implements CommandLineRunner {
 				100,
 				BigDecimal.valueOf(2.45),
 				LocalDate.of(2024, 4, 26),
-				"frutas");
+				frutas);
 
 		// Se produto for um objeto transiente, .save() chama o método persist da JPA
 		// Se produto for um objeto destacado, .save() chama o método merge da JPA
@@ -51,7 +64,7 @@ public class Apirestfulv1Application implements CommandLineRunner {
 				200,
 				BigDecimal.valueOf(1.1),
 				LocalDate.of(2024, 5, 22),
-				"legumes");
+				legumes);
 
 		produtoRepository.save(produto);
 
