@@ -1,7 +1,0 @@
-@DeleteMapping("{idProduto}")
-public void removerProduto(@PathVariable("idProduto") Long id){
-	ProdutoService.removerProduto(id);
-}
-
-public void removerProduto(Long id)
-produtoRepository.deleteById(id);
