@@ -1,4 +1,4 @@
-# CRUD em Java utilizando JPA
+# CRUD em Java utilizando JPA (1/4)
 ### Java Persistence API (JPA)
 A JPA é uma especificação para mapeamento objeto-relacional (ORM) em Java, permitindo que objetos Java sejam persistidos e recuperados de bancos de dados relacionais. Ela define as regras e práticas para a persistência de dados, mas não fornece uma implementação concreta.
 
