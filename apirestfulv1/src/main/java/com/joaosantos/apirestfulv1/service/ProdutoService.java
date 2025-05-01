@@ -3,7 +3,7 @@ package com.joaosantos.apirestfulv1.service;
 import com.joaosantos.apirestfulv1.exception.ProdutoNaoEncontradoException;
 import com.joaosantos.apirestfulv1.model.Produto;
 import com.joaosantos.apirestfulv1.repository.ProdutoRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,12 +59,12 @@ public class ProdutoService{
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void removerProduto(long id){
+    public void removerProduto(long id) {
         produtoRepository.deleteById(id);
 //        produtoRepository.deleteById(1L);
-//        if(true){
+//        if (true) {
 //            throw new Exception("Deu erro!");
 //        }
+//        produtoRepository.deleteById(2L);
     }
-
 }

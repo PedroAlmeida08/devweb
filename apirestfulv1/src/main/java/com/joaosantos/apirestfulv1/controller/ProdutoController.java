@@ -43,6 +43,6 @@ public class ProdutoController{
     // feita para http://localhost:8080/produtos
     @DeleteMapping("{idProduto}")
     public void removerProduto(@PathVariable("idProduto") Long id){
-        ProdutoService.removerProduto(id);
+        produtoService.removerProduto(id);
     }
 }
