@@ -1,85 +1,85 @@
 JPAProdutoDAO = ProdutoDAOImpl
 
-Em tempo de compilação, método inclui de ProdutoDAO(Interface)
+Em tempo de compilação:
+- O método inclui é da interface ProdutoDAO.
 
-Em tempo de execução, método inclui de JPAProdutoDAO
+Em tempo de execução:
+- O método inclui é de JPAProdutoDAO.
 
-Da forma em que estamos programando, as transações são criadas e destruídas após a execução de cada método.
+Transações
+As transações são criadas e destruídas após a execução de cada método.
 
-1) Criar um entity manager (FabricadeEntityManager)
-em = FabricaDeEntityManager.criarEntityManager();
+Passos para Criar e Gerenciar Transações:
+1. Criar um Entity Manager (FabricaDeEntityManager)
+   em = FabricaDeEntityManager.criarEntityManager();
+   O Entity Manager contém uma lista dos objetos monitorados.
 
-Entity Manager contém uma lista dos objetos monitorados
+2. Criar um objeto que cria ou recupera uma transação existente
+   tx = em.getTransaction();
+   O Entity Manager cria a transação.
 
-2) Criar um objeto que cria uma transação ou recupera uma existente
-tx = em.getTransaction();
-Entity Manager cria a transação
+3. Iniciar transação
+   tx.begin();
+   O Entity Manager envia um begin transaction para o SGBD.
 
-3) Iniciar transação (envia um begin transaction para o SGBD)
-tx.begin();
-Entity Manager inicia a transação
+4. Salvar o objeto no BD
+   em.persist(umProduto);
+   O Entity Manager verifica se o objeto é transiente (Id = null), caso contrário, ocorre um erro, pois o objeto já é destacado (Id != null).
 
-4) Salva o objeto no BD
-em.persist(umProduto);
-Entity Manager verifica se o objeto é transiente (Id = null), cc, erro, pois objeto é destacado (Id != null). Id != null => objeto já inserido no BD.
+   - Em um SGBD que usa sequence (não é o caso do MySQL, mas sim PostGRE e Oracle):
+     - Recupera o próximo valor da sequence.
+     - Atribui o valor ao Id.
+     - O objeto se torna persistente (Id != null).
+     - O produto é adicionado à lista de objetos monitorados pelo Entity Manager.
+     - O comando INSERT é agendado para execução no momento do commit.
 
-Em um SGBD que usa sequence (não é o caso do MySQL - PostGRE e Oracle)
-- Recupera o próximo valor da sequence
-- Atribui valor ao Id
-- Nesse momento o objeto passa a ser um objeto persistente (Id != null)
-- Adiciona o produto à lista de objetos monitorados pelo entity manager
-- Agenda a execução do comando INSERT (executado no momento do commit)
+   - Em um SGBD que não usa sequence (MySQL):
+     - O comando INSERT é executado.
+     - O valor da coluna Id é atribuído ao Id do objeto.
+     - O produto é adicionado à lista de objetos monitorados pelo Entity Manager.
+     - A transação é cometida.
 
-5) Commita a transação
-tx.commit();
+5. Commita a transação
+   tx.commit();
 
-Em um SGBD que não usa sequence (MySQL)
-- Executa o comando INSERT
-- Atribui valor da coluna Id ao Id do objeto
-- Adiciona o produto à lista de objetos monitorados pelo entity manager
-- Commita
+6. Retorna o Id do produto
+   return umProduto.getId();
 
-6) Retorna o Id do produto
-return umProduto.getId();
+7. Se houver erro, realiza o rollback
+   tx.rollback();
 
-7) Se a transação foi criada mas houve um erro, efetua rollback
-tx.rollback();
+8. Destrói o Entity Manager
+   em.close();
 
-8) Destrói o Entity Manager
-em.close();
+Problemas com Entity Manager Estático:
+- Se o Entity Manager for criado como variável estática e não for destruído, ao persistir o objeto, ele será salvo na lista de objetos monitorados.
+- Mesmo que o objeto tenha sido excluído, o Entity Manager tentará realizar comandos de update, resultando em erro.
 
-Se o Entity Manager fosse criado como variável estática e não fosse destruído:
-- No momento do persist, como o objeto está salvo na lista de objetos monitorados pelo entity manager, irá tentar realizar os comandos de uptade mesmo que o objeto já tenha sido excluído => erro!
-
+Fluxo do Banco de Dados (BD)
+Fluxo de Execução:
 BD <-> Controller <-> Service <-> DAO
 
-9) Executar código e cadastrar produto ("aaa", 1000, 12/12/2012);
+Exemplo de Execução:
+- Cadastrar produto com os seguintes dados:
+  ("aaa", 1000, 12/12/2012);
 
-Criação do Entity Manager é rápida, mas a criação da FabricaDeEntityManager é demorada e, por isso, há lentidão na primeira execução do código.
+Observação:
+- A criação do Entity Manager é rápida, mas a criação da FabricaDeEntityManager é demorada. Por isso, pode haver lentidão na primeira execução do código.
 
-Current profile has no WMI enabled
+Método recuperaUmProduto
 
---------------------------------------------------------------------------------------------------
-
-Método recuperaUmProduto:
-
-int i = 10;
-Posição de memória cujo valor é 10
-Integer j = new Integer(10);
-Endereço do objeto que contém uma variável de instância cujo valor é 10
-
+Exemplo de variáveis e unboxing:
+int i = 10; // Posição de memória com valor 10
+Integer j = new Integer(10); // Endereço do objeto que contém a variável de instância com valor 10
 Unboxing:
-int k = j
-Valor 10 é atribuído a k
+int k = j; // Valor 10 é atribuído a k
 
-Produto.class aponta para um objeto na memória do tipo class que é a classe Produto na memória, que contém os valores das variáveis estáticas.
+Wrapper Classes:
+- int -> Integer
+- long -> Long
+- float -> Float
+- double -> Double
 
-Wrapper classes: int -> Integer
-		 long -> Long
-		 float -> Float
-		 double -> Double
-		 
-Não tem transação no método inclui, logo, também não há commit e nem rollback (não há catch).
-
-Exceção explode na tela (sem ter feito rollback, diferente do método inclui que realiza o rollback e dps explode a exceção na tela).
-
+Observações Importantes
+- Não há transação no método inclui, logo não há commit nem rollback (não há catch).
+- Em caso de exceção, ela explodirá na tela, sem ter sido feito rollback, diferente do método inclui, que realiza rollback e depois explodirá a exceção na tela.
