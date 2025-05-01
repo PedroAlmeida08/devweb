@@ -1,5 +1,5 @@
 {
-  "name": "projeto01",
+  "name": "projeto02",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -11,9 +11,10 @@
   },
   "dependencies": {
     "bootstrap": "^5.3.5",
+    "dayjs": "^1.11.13",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router-dom": "^7.5.3"
+    "react-router-dom": "^7.5.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
