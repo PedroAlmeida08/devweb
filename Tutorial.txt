@@ -1,84 +1,100 @@
-Processo para Configuração e Implementação
-Instalar MySQL e criar um banco de dados.
+# Processo para Configuração e Implementação
 
-Criar tabelas com um script SQL em package script -> tabelas.sql.
+1. **Instalar MySQL e criar um banco de dados.**
 
-Configurar o banco de dados em META-INF -> persistence.xml.
+2. **Criar tabelas com um script SQL** em `package script -> tabelas.sql`.
 
-No Maven, recarregar todos os projetos para gerar a pasta necessária.
+3. **Configurar o banco de dados** em `META-INF -> persistence.xml`.
 
-Adicionar o package Console em C:\Users\[usuário]\.m2\repository\corejava\console\1.0.
+4. **No Maven**, recarregar todos os projetos para gerar a pasta necessária.
 
-Build Project para construir o projeto.
+5. **Adicionar o package Console** em `C:\Users\[usuário]\.m2\repository\corejava\console\1.0`.
 
-DAO (Data Access Object)
-O padrão DAO é utilizado para separar a lógica de acesso a dados da lógica de negócios. Exemplo:
+6. **Build Project** para construir o projeto.
 
-ProdutoDAO é a interface.
+---
 
-JPAProdutoDAO é a implementação da interface utilizando JPA.
+# DAO (Data Access Object)
 
-O método GetDAO retorna um objeto que implementa a interface, como o JPAProdutoDAO.
+O padrão DAO é utilizado para separar a lógica de acesso a dados da lógica de negócios.
 
-Mapeamento de Entidades com JPA
-@Entity é a anotação que mapeia uma classe de domínio para uma tabela.
+## Exemplo:
+- `ProdutoDAO` é a interface.
+- `JPAProdutoDAO` é a implementação da interface utilizando JPA.
+- O método `GetDAO` retorna um objeto que implementa a interface, como o `JPAProdutoDAO`.
 
-@Table(name="produto") define o nome da tabela no banco de dados.
+---
 
-@Id é a anotação que define o identificador (ID) da entidade.
+# Mapeamento de Entidades com JPA
 
-A diferença entre Long (classe) e long (tipo primitivo) é que o Long pode ser null, enquanto o long não pode.
+- `@Entity` é a anotação que mapeia uma classe de domínio para uma tabela.
+- `@Table(name="produto")` define o nome da tabela no banco de dados.
+- `@Id` é a anotação que define o identificador (ID) da entidade.
 
-Método Transiente
-A anotação @Transient pode ser usada em métodos ou campos para indicar que eles não devem ser persistidos no banco de dados.
+### Diferença entre `Long` e `long`
+- `Long` (classe) pode ser `null`.
+- `long` (tipo primitivo) não pode ser `null`.
 
-Programação do Método inclui
-A implementação do método inclui na classe JPAProdutoDAO vai persistir o objeto Produto. Isso ocorre em tempo de execução, enquanto o método é definido na interface ProdutoDAO em tempo de compilação.
+---
 
-Dependência Reflection
-A dependência reflections pode ser usada para facilitar a criação de DAOs dinâmicos, afetando a fábrica de DAOs
+# Método Transiente
 
-1 - Instalar MySQL
-2 - Criar um banco de dados
-3 - Criar tabelas (package script -> tabelas.sql)
-4 - Configurar banco de dados no package resources -> META-INF -> persistence.xml
-5 - Aba Maven -> Reload All Maven Projects (isso irá criar a pasta utilizada no passo 6)
-6 - Adicionar package Console em C:\Users\[nome de usuário]\.m2\repository\corejava\console\1.0
-7 - Build Project
+A anotação `@Transient` pode ser usada em métodos ou campos para indicar que eles **não devem ser persistidos** no banco de dados.
 
-7 - Data Access Object (padrão de projetos de acesso a dados) = DAO
-8 - dao -> ProdutoDAO é uma interface / dao -> impl -> JPAProdutoDAO é a classe que implementa ProdutoDAO utilizando JPA
-9 - GetDAO recebe  retorna um objeto de uma classe que implementa aquela interface (retorna JPAProdutoDAO)
+---
 
-10 - ProdutoDAO.class aponta para a interface do produto DAO em memória
-11 - Produto com id null = produto ainda não cadastrado no banco de dados = objeto transiente
-12 - Em tempo de execução o método inclui é de JPAProdutoDAO
-13 - Em tempo de compilação o método inclui é de ProdutoDAO
+# Programação do Método `inclui`
 
+A implementação do método `inclui` na classe `JPAProdutoDAO` vai persistir o objeto `Produto`. Isso ocorre **em tempo de execução**, enquanto o método é definido na interface `ProdutoDAO` em **tempo de compilação**.
+
+---
+
+# Dependência Reflection
+
+A dependência `reflections` pode ser usada para facilitar a criação de DAOs dinâmicos, afetando a fábrica de DAOs.
+
+---
+
+# Passos para Implementação
+
+1. **Instalar MySQL.**
+
+2. **Criar um banco de dados.**
+
+3. **Criar tabelas** com o script SQL em `package script -> tabelas.sql`.
+
+4. **Configurar banco de dados** no `package resources -> META-INF -> persistence.xml`.
+
+5. **No Maven**, ir até `Aba Maven -> Reload All Maven Projects`. Isso irá criar a pasta necessária para o passo 6.
+
+6. **Adicionar package Console** em `C:\Users\[nome de usuário]\.m2\repository\corejava\console\1.0`.
+
+7. **Build Project** para construir o projeto.
+
+---
+
+# Data Access Object (DAO) - Padrão de Projeto
+
+- **DAO:** 
+    - `ProdutoDAO` é a interface.
+    - `JPAProdutoDAO` é a classe que implementa `ProdutoDAO` utilizando JPA.
+  
+- **Método GetDAO:** Recebe e retorna um objeto de uma classe que implementa aquela interface (retorna `JPAProdutoDAO`).
+
+---
+
+# Detalhes Adicionais sobre o DAO
+
+- `ProdutoDAO.class` aponta para a interface do produto DAO em memória.
+- Produto com `id = null` significa que o produto ainda não foi cadastrado no banco de dados, ou seja, é um **objeto transiente**.
+- **Em tempo de execução**, o método `inclui` é de `JPAProdutoDAO`.
+- **Em tempo de compilação**, o método `inclui` é de `ProdutoDAO`.
+
+---
+
+# Exemplo de Código
+
+```java
 import com.carlosribeiro.dao.impl.JPAProdutoDAO;
 // ProdutoDAO produtoDAO = FabricaDeDAOs.getDAO(ProdutoDAO.class);
 ProdutoDAO produtoDAO = new JPAProdutoDAO();
-
-JPA mapeia classes em tabelas
-
-@Entity notação em classes de domínio do problema
-@Table(name="produto") define o nome da tabela
-
-id sempre será do tipo classe
-
-Tipo Long = classe = id null
-Tipo long = tipo = id 0
-Produto com id = 0 -> objeto destacado = já está no banco de dados
-
-Definir atributos da classe
-Definir get e set de todos os atributos
-
-Pesquisar sobre @Transient
-Método criado na classe de domínio mas que não se deseja criar uma coluna no banco de dados
-
-14 - Programar método inclui de ProdutoDAO
-
-Ctrl + / -> Comentar/Descomentar linha
-
-Dependência reflections
-Afeta FabricadeDAOs
