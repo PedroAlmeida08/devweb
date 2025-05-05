@@ -17,7 +17,7 @@ const ProdutosPage = () => {
       // as Promise<Produto[]> é uma asserção e, diferente de um cast, 
       // dá erro em tempo de execução, mas não em tempo de compilação
       // Faz com que produtos seja um vetor de Produto
-      return response.json() as Promise<Produto[]>
+      return response.json()
     })
     .then((produtos) => {
       setProdutos(produtos)
