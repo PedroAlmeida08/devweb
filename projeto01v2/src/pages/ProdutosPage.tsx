@@ -15,11 +15,15 @@ const ProdutosPage = () => {
     getProdutos();
   }, [])
 
+  // == compara apenas valor
+  // === compara valor e tipo
+  if (produtos.length === 0)
+    return <p className="fw-bold">Carregando produtos ...</p>
+
   return (
     <>
       <h5>Lista de Produtos</h5>
-      <hr />
-
+      <hr className="mt-1"/>
       <TabelaDeProdutos produtos={produtos} />
     </>
   );
