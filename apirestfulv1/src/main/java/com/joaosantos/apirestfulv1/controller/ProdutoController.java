@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 // Permite solicitações feitas por outras aplicações
-@CrossOrigin("https:localhost:5173")
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController                // GET - POST - PUT - DELETE
 @RequestMapping("produtos") // Indica que todas as requisições feitas http://localhost:8080/produtos
                                // serão direcionadas a esse controller
