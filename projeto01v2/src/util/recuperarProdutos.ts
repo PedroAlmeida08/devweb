@@ -153,11 +153,12 @@ const produtos: Produto[] = [
 ];
 
 const recuperarProdutos = () => {
-  console.log("Entrou em recuperarProdutos");
+  console.log("Excecutando recuperarProdutos()");
   return new Promise<Produto[]>((resolve) => {
     setTimeout(() => {
       resolve(produtos);
     }, 2000)
   })
+    return produtos
 }
 export default recuperarProdutos;
