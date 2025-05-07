@@ -3,7 +3,7 @@ import useRecuperarProdutos from "../hooks/useRecuperarProdutos";
 
 const ProdutosPage = () => {
   const {data: produtos,
-         isLoading: carregandoProdutos,
+         isPending: carregandoProdutos,
          error: errorProdutos} = useRecuperarProdutos();
   
   if (carregandoProdutos) return <p className="fw-bold">Carregando produtos...</p>;
