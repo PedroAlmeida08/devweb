@@ -1,9 +1,10 @@
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import useRecuperarProdutoPorId from "../hooks/useRecuperarProdutoPorId";
 import dayjs from "dayjs";
 
 const ProdutoPage = () => {
   const {id} = useParams();
+  const navigate = useNavigate();
 
   const {data: produto,
     isPending: carregandoProduto,
@@ -81,12 +82,12 @@ const ProdutoPage = () => {
             </div>
           </div>
           <div className="col-lg-3 col-md-4 col-6 mt-3">
-            <button className="btn btn-primary btn-sm me-3 w-100" type="button">
+            <button onClick={() => navigate('/produtos')} className="btn btn-primary btn-sm me-3 w-100" type="button">
               Editar
             </button>
           </div>
           <div className="col-lg-3 col-md-4 col-6 mt-3">
-            <button className="btn btn-danger btn-sm w-100" type="button">
+            <button onClick={() => navigate('/produtos')} className="btn btn-danger btn-sm w-100" type="button">
               Remover
             </button>
           </div>
