@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import Produto from "../interfaces/Produto";
+import { Link } from "react-router-dom";
 
 // interface Props {
 //     produtos: Produto[];
@@ -34,7 +35,7 @@ const TabelaDeProdutos = ({ produtos }: { produtos: Produto[] }) => {
                 />
               </td>
               <td className="text-center align-middle">
-                {produto.categoria.nome}
+                <Link to={`/produtos/${produto.id}`}>{produto.categoria.nome}</Link>
               </td>
               <td className="align-middle p-3">{produto.nome}</td>
               <td className="text-center align-middle">

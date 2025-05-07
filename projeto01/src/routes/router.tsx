@@ -6,6 +6,7 @@ import ProdutosPage from "../pages/ProdutosPage";
 import CarrinhoPage from "../pages/CarrinhoPage";
 import LoginPage from "../pages/LoginPage";
 import ErrorPage from "../pages/ErrorPage";
+import ProdutoPage from "../pages/ProdutoPage";
 
 const router = createBrowserRouter([
     {
@@ -17,7 +18,8 @@ const router = createBrowserRouter([
             {path: "produtos", element: <ProdutosPage />},
             {path: "carrinho", element: <CarrinhoPage />},
             {path: "contatos", element: <ContatosPage />},
-            {path: "login", element: <LoginPage />}
+            {path: "login", element: <LoginPage />},
+            {path: "produtos/:id", element: <ProdutoPage />}
         ]
     }
 ])
