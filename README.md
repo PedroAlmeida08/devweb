@@ -27,10 +27,19 @@ npm run dev
 
 ## 📦 Dependências Adicionais
 
-Instale o `react-router-dom` para gerenciar as rotas da aplicação:
+- **`react-router-dom`**  
+  Biblioteca de roteamento para aplicações React. Permite a navegação entre páginas e o gerenciamento de rotas no front-end de forma declarativa.
+
+- **`dayjs`**  
+  Biblioteca para manipulação e formatação de datas em JavaScript. Leve, rápida e uma alternativa moderna ao Moment.js.
+
+- **`@tanstack/react-query`**  
+  Gerenciador de estado assíncrono e cache para React. Facilita o consumo e sincronização de dados de APIs com uma abordagem baseada em hooks.
 
 ```bash
 npm install react-router-dom
+npm install dayjs
+npm install @tanstack/react-query
 ```
 
 ## 🧱 Estrutura do Projeto
