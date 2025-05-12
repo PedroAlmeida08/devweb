@@ -30,14 +30,16 @@ const TabelaDeProdutos = ({ produtos }: { produtos: Produto[] }) => {
               <td className="text-center align-middle">
                 <img
                   src={produto.imagem}
-                  alt="imagem do produto"
-                  style={{ width: "35px" }}
+                  alt="imagem de produto"
+                  style={{ width: "40px" }}
                 />
               </td>
               <td className="text-center align-middle">
-                <Link to={`/produtos/${produto.id}`}>{produto.categoria.nome}</Link>
+                {produto.categoria.nome}
               </td>
-              <td className="align-middle p-3">{produto.nome}</td>
+              <td className="align-middle ps-3">
+                <Link to={"/produtos/" + produto.id}>{produto.nome}</Link>
+              </td>
               <td className="text-center align-middle">
                 {produto.disponivel ? "Sim" : "Não"}
               </td>
