@@ -1,0 +1,40 @@
+import { ReactNode } from "react"
+
+interface Props{
+    pagina: number,
+    totalDePaginas: number,
+    tratarPaginacao: (pagina:number) => void;
+}
+
+const Paginacao = ({pagina, totalDePaginas}: Props) => {
+  
+    const arrayDePaginas: ReactNode[] = [];
+
+    for (let i = 0; i < totalDePaginas; i++) {
+        arrayDePaginas.push(
+            <li className={pagina === i ? "page-item active" : "page-item"}>
+                <a onClick={()=> tratarPaginacao(i)} className="page-link" aria-current="page">
+                    {i+1}
+                </a>
+            </li>
+        )
+    }
+    
+    return (
+    <>
+        <nav aria-label="...">
+            <ul className="paginacao">
+                <li className={pagina === 0 ? "page-item disabled" : "page-item"}>
+                    <a onClick={()=> tratarPaginacao(pagina-1)} className="page-link">Anterior</a>
+                </li>
+                {arrayDePaginas}
+                <li className={pagina === totalDePaginas-1 ? "page-item disabled" : "page-item"}>
+                    <a onClick={()=> tratarPaginacao(pagina+1)} className="page-link">Próxima</a>
+                </li>
+            </ul>
+        </nav>
+    </>
+  )
+}
+
+export default Paginacao

@@ -1,8 +1,13 @@
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { keepPreviousData, queryOptions, useQuery } from "@tanstack/react-query";
 import ResultadoPaginado from "../interfaces/ResultadoPaginado";
 import Produto from "../interfaces/Produto";
 
-const useRecuperarProdutosComPaginacao = async (pagina: number, tamanho: number): Promise<ResultadoPaginado<Produto>> => {
+interface QueryString{
+  pagina: number,
+  tamanho: number
+}
+
+const useRecuperarProdutosComPaginacao = async (queryString: QueryString): Promise<ResultadoPaginado<Produto>> => {
   // await new Promise<void>((resolve) => {
   //  setTimeout(()=> {
   //   resolve();
@@ -11,8 +16,8 @@ const useRecuperarProdutosComPaginacao = async (pagina: number, tamanho: number)
   await new Promise<void>((resolve) => {
     setTimeout(resolve, 2000)
   })
-  const RecuperarProdutosComPaginacao = async (pagina: number, tamanho: number) => {
-    const response = await fetch(`http://localhost:8080/produtos/paginacao?pagina=${pagina}&tamanho=${tamanho}`);
+  const RecuperarProdutosComPaginacao = async (queryString: QueryString) => {
+    const response = await fetch("http://localhost:8080/produtos/paginacao?" + new URLSearchParams((...queryString)));
     if (!response.ok) {
       // throw "deu erro!";
       throw new Error(
@@ -24,8 +29,8 @@ const useRecuperarProdutosComPaginacao = async (pagina: number, tamanho: number)
   };
 
   return useQuery({
-    queryKey: ["produtos", "paginacao", pagina, tamanho],
-    queryFn: () => RecuperarProdutosComPaginacao(pagina, tamanho),
+    queryKey: ["produtos", "paginacao", queryString],
+    queryFn: () => RecuperarProdutosComPaginacao(queryString: QueryString),
     staleTime: 10_000,
     placeholderData: keepPreviousData
   });

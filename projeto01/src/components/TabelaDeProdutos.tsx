@@ -38,7 +38,7 @@ const TabelaDeProdutos = ({ produtos }: { produtos: Produto[] }) => {
                 {produto.categoria.nome}
               </td>
               <td width="17%"className="align-middle ps-3">
-                <Link to={"/produtos/" + produto.id}>{produto.nome}</Link>
+                <Link style={{textDecoration: "none"}} to={"/produtos/" + produto.id}>{produto.nome}</Link>
               </td>
               <td width="13%"className="text-center align-middle">
                 {produto.disponivel ? "Sim" : "Não"}
