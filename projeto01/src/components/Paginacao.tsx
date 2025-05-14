@@ -12,13 +12,15 @@ const Paginacao = ({pagina, totalDePaginas}: Props) => {
 
     for (let i = 0; i < totalDePaginas; i++) {
         arrayDePaginas.push(
-            <li className={pagina === i ? "page-item active" : "page-item"}>
+            <li key = {i} className={pagina === i ? "page-item active" : "page-item"}>
                 <a onClick={()=> tratarPaginacao(i)} className="page-link" aria-current="page">
                     {i+1}
                 </a>
             </li>
         )
     }
+
+    if(totalDePaginas < 2) return;
     
     return (
     <>

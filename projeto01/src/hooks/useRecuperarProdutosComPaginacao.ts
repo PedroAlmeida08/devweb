@@ -3,8 +3,9 @@ import ResultadoPaginado from "../interfaces/ResultadoPaginado";
 import Produto from "../interfaces/Produto";
 
 interface QueryString{
-  pagina: number,
-  tamanho: number
+  pagina: string,
+  tamanho: string,
+  nome: string
 }
 
 const useRecuperarProdutosComPaginacao = async (queryString: QueryString): Promise<ResultadoPaginado<Produto>> => {
@@ -30,7 +31,7 @@ const useRecuperarProdutosComPaginacao = async (queryString: QueryString): Promi
 
   return useQuery({
     queryKey: ["produtos", "paginacao", queryString],
-    queryFn: () => RecuperarProdutosComPaginacao(queryString: QueryString),
+    queryFn: () => RecuperarProdutosComPaginacao(QueryString),
     staleTime: 10_000,
     placeholderData: keepPreviousData
   });
