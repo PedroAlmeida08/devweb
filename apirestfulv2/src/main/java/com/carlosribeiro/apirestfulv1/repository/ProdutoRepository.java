@@ -25,8 +25,11 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
     Optional<Produto> recuperarProdutoPorId(@Param("id") Long id);
 
     @Query(
-            value = "select p from Produto p left outer join fetch p.categoria order by p.id",
-            countQuery = "select count(p) from Produto p"
+            value = "select p" +
+            "from Produto p left outer join fetch p.categoria" +
+            "where p.nome like :nome" +
+            "order by p.id",
+            countQuery = "select count(p) from Produto p where p.nome like :nome"
     )
-    Page<Produto> recuperarProdutosComPaginacao(Pageable pageable);
+    Page<Produto> recuperarProdutosComPaginacao(Pageable pageable, @Param("nome") String nome);
 }

@@ -69,7 +69,7 @@ public class ProdutoService {
                 "Produto número " + id + " não encontrado."));
     }
 
-    public Page<Produto> recuperarProdutosComPaginacao(Pageable pageable){
-        return produtoRepository.recuperarProdutosComPaginacao(pageable);
+    public Page<Produto> recuperarProdutosComPaginacao(Pageable pageable, String nome){
+        return produtoRepository.recuperarProdutosComPaginacao(pageable, "%" + nome + "%");
     }
 }

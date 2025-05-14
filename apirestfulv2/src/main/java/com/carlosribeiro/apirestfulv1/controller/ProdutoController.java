@@ -52,9 +52,10 @@ public class ProdutoController {
     @GetMapping("paginacao")
     public ResultadoPaginado<Produto> recuperarProdutosComPaginacao(
             @RequestParam(value = "pagina", defaultValue = "0") int pagina,
-            @RequestParam(value = "tamanho", defaultValue = "5") int tamanho) {
+            @RequestParam(value = "tamanho", defaultValue = "5") int tamanho,
+            @RequestParam(value = "nome", defaultValue = "") String nome) {
         Pageable pageable = PageRequest.of(pagina, tamanho);
-        Page<Produto> page = produtoService.recuperarProdutosComPaginacao(pageable);
+        Page<Produto> page = produtoService.recuperarProdutosComPaginacao(pageable, nome);
         ResultadoPaginado<Produto> resultadoPaginado = new ResultadoPaginado<>(
                 page.getTotalElements(),
                 page.getTotalPages(),
