@@ -18,8 +18,8 @@ import { Link } from "react-router-dom";
             <th className="text-center align-middle">Imagem</th>
             <th className="text-center align-middle">Categoria</th>
             <th className="text-center align-middle">Nome</th>
-            <th className="text-center align-middle">Disponível</th>
             <th className="text-center align-middle">Data de Cadastro</th>
+            <th className="className text-center align-middle"> Quantidade</th>
             <th className="text-center align-middle">Preço</th>
             <th className="text-center align-middle">Ação</th>
           </tr>
@@ -42,10 +42,10 @@ import { Link } from "react-router-dom";
                 <Link style={{textDecoration: "none"}} to={"/produtos/" + produto.id}>{produto.nome}</Link>
               </td>
               <td width="13%" className="text-center align-middle">
-                {produto.disponivel ? "Sim" : "Não"}
+                {dayjs(produto.dataCadastro).format("DD/MM/YYYY")}
               </td>
               <td width="13%" className="text-center align-middle">
-                {dayjs(produto.dataCadastro).format("DD/MM/YYYY")}
+                {produto.qtdEstoque}
               </td>
               <td width="10%" className="text-end align-middle pe-3">
                 {produto.preco.toLocaleString("pt-BR", {
@@ -62,6 +62,22 @@ import { Link } from "react-router-dom";
             </tr>
           ))}
         </tbody>
+        <tfoot>
+          <tr>
+            <td className="text-center align-middle fw-bold" colSpan={5}>Total ...</td>
+            <td className="text-center align-middle fw-bold" colSpan={2}></td>
+            <td className="text-center align-middle fw-bold">
+            {/* reduce percorre os produtos */}
+              {produtos
+                .reduce((total, produto) => total + produto.qtdEstoque * produto.preco, 0)
+                .toLocaleString("pt-BR", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                  useGrouping: true,
+                })}
+            </td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   );
