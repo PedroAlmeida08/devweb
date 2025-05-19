@@ -4,8 +4,7 @@ import useRecuperarProdutosComPaginacao from "../hooks/useRecuperarProdutosComPa
 import Produto from "../interfaces/Produto";
 import Paginacao from "../components/Paginacao";
 import Pesquisa from "../components/Pesquisa";
-import { useMutation } from "@tanstack/react-query";
-import queryClient from "../main";
+import useRemoverProdutoPorId from "../hooks/useRemoverProdutoPorId";
 
 const ProdutosComPaginacaoPage = () => {
   const [pagina, setPagina] = useState(0);
@@ -27,28 +26,20 @@ const ProdutosComPaginacaoPage = () => {
     setPagina(0);
   }
 
-  const removerProdutoPorId = async (id: number) => {
-    const response = await fetch("http://localhost:8080/produtos/" + id, {
-      method: "DELETE"
-    })
-    if(!response.ok){
-      throw new Error("Ocorreu um erro ao remover o produto com id = " + id + ". Status code = " + response.status)
-    }
-    // Não retornar nada porque o backend retorna void
-    //return await response.json();
-  }
+  const{mutate: removerProduto,
+    error: errorRemocaoProduto } = useRemoverProdutoPorId();
 
-  const {mutate: removerProduto} = useMutation({
-    mutationFn: (id: number) => removerProdutoPorId(id),
-    onSuccess: (_, id) => {
-      queryClient.invalidateQueries({
-        queryKey: ["produtos"]
-      })
-      queryClient.invalidateQueries({
-        queryKey: ["produtos", id]
-      })
-    }
-  })
+  //const {mutate: removerProduto} = useMutation({
+  //  mutationFn: (id: number) => removerProdutoPorId(id),
+  //  onSuccess: (_, id) => {
+  //    queryClient.invalidateQueries({
+  //      queryKey: ["produtos"]
+  //    })
+  //    queryClient.invalidateQueries({
+  //      queryKey: ["produtos"]
+  //    })
+  //  }
+  //})
 
   const tratarRemocao = (id: number) => {
     removerProduto(id);
@@ -57,6 +48,7 @@ const ProdutosComPaginacaoPage = () => {
 
   if (carregandoProdutos) return <p className="fw-bold">Carregando produtos...</p>
   if (errorProdutos) throw errorProdutos;
+  if (errorRemocaoProduto) throw errorRemocaoProduto;
   
   const produtos: Produto[] = resultadoPaginado.itens;
   const totalDePaginas: number = resultadoPaginado.totalDePaginas;
