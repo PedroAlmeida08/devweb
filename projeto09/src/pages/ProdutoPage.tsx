@@ -1,8 +1,11 @@
 import { useNavigate, useParams } from "react-router-dom";
 import useRecuperarProdutoPorId from "../hooks/useRecuperarProdutoPorId";
 import dayjs from "dayjs";
+import useRemoverProdutoPorId from "../hooks/useRemoverProdutoPorId";
+import { useState } from "react";
 
 const ProdutoPage = () => {
+  const [removido, setRemovido] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -10,10 +13,19 @@ const ProdutoPage = () => {
     data: produto,
     isPending: carregandoProduto,
     error: errorProduto,
-  } = useRecuperarProdutoPorId(+id!);
+  } = useRecuperarProdutoPorId(+id!, false);
+
+  const {mutate: removerProduto,
+         error: errorRemocaoProduto} = useRemoverProdutoPorId();
+
+  const tratarRemocao = (id: number) => {
+    removerProduto(id);
+    setRemovido(true);
+  }
 
   if (carregandoProduto) return <p className="fw-bold">Carregando produtos...</p>;
   if (errorProduto) throw errorProduto;
+  if (errorRemocaoProduto) throw errorRemocaoProduto;
 
   return (
     <>
@@ -21,6 +33,11 @@ const ProdutoPage = () => {
         <h5>Cadastro de Produtos</h5>
         <hr className="mt-1" />
       </div>
+
+      {removido && 
+      <div className="alert alert-primary" role="alert">
+        Produto removido com sucesso!
+      </div>}
 
       <div className="row">
         <div className="col-lg-3 col-md-4">
@@ -81,12 +98,12 @@ const ProdutoPage = () => {
           </div>
         </div>
         <div className="col-lg-3 col-md-4 col-6 mt-3">
-          <button onClick={() => navigate("/produtos")} className="btn btn-primary btn-sm me-3 w-100" type="button">
+          <button disabled={removido} onClick={() => navigate("/produtos")} className="btn btn-primary btn-sm me-3 w-100" type="button">
             Editar
           </button>
         </div>
         <div className="col-lg-3 col-md-4 col-6 mt-3">
-          <button onClick={() => navigate("/produtos")} className="btn btn-danger btn-sm w-100" type="button">
+          <button disabled={removido} onClick={() => tratarRemocao} className="btn btn-danger btn-sm w-100" type="button">
             Remover
           </button>
         </div>

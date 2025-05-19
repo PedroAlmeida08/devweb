@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import Produto from "../interfaces/Produto";
 
-const useRecuperarProdutoPorId = (id: number) => {
+const useRecuperarProdutoPorId = (id: number, removido: boolean) => {
   
   const recuperarProdutoPorId = async (id: number): Promise<Produto> => {
     const response = await fetch("http://localhost:8080/produtos/" + id);
@@ -24,6 +24,7 @@ const useRecuperarProdutoPorId = (id: number) => {
     queryKey: ["produto", id],
     queryFn: () => recuperarProdutoPorId(id),
     staleTime: 10_000,
+    enabled: !removido
   });
 };
 export default useRecuperarProdutoPorId;
