@@ -7,6 +7,7 @@ import LoginPage from "../pages/LoginPage";
 import ProdutoPage from "../pages/ProdutoPage";
 import ProdutosComPaginacaoPage from "../pages/ProdutosComPaginacaoPage";
 import Layout from "./Layout";
+import CardsPorSlugCategoriaPage from "../pages/CardsPorSlugCategoriaPage";
 
 const router = createBrowserRouter([
     {
@@ -14,7 +15,13 @@ const router = createBrowserRouter([
         element: <Layout />,
         errorElement: <ErrorPage />,
         children: [
-            {path: "", element: <HomePage />},
+            {
+                path: "", 
+                element: <HomePage />,
+                children: [
+                    {path: ":slugCategoria?", element: <CardsPorSlugCategoriaPage />}
+                ]
+            },
             {path: "produtos", element: <ProdutosComPaginacaoPage />},
             {path: "carrinho", element: <CarrinhoPage />},
             {path: "contatos", element: <ContatosPage />},

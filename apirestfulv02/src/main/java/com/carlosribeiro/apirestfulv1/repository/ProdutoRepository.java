@@ -24,6 +24,9 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
     @Query("select p from Produto p left outer join fetch p.categoria where p.id = :id")
     Optional<Produto> recuperarProdutoPorId(@Param("id") Long id);
 
+    @Query("select p from Produto p left outer join fetch p.categoria c where c.slug =:slugCategoria")
+    List<Produto> recuperarProdutosPorSlugCategoria(@Param("slugCategoria") String slugCategoria);
+
     @Query(
             value = "select p " +
                     "from Produto p " +

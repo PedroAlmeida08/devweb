@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import hortifruti from "../assets/hortifruti.png";
 const NavBar = () => {
   return (
-    <nav className="navbar navbar-expand-lg bg-success navbar-dark">
+    <nav className="navbar navbar-expand-lg bg-light navbar-light">
       <div className="container">
         <NavLink className="navbar-brand" to="/">
           <img

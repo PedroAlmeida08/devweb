@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +26,10 @@ public class ProdutoService {
 
     public Produto cadastrarProduto(Produto produto) {
         return produtoRepository.save(produto);
+    }
+
+    public List<Produto> recuperarProdutosPorSlugCategoria(@PathVariable("slugCategoria") String slugCategoria){
+	    return produtoRepository.recuperarProdutosPorSlugCategoria(slugCategoria);
     }
 
 //    public Produto alterarProduto(Produto produto) {

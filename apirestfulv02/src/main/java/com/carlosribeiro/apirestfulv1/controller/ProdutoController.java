@@ -33,6 +33,12 @@ public class ProdutoController {
         return produtoService.recuperarProdutoPorId(id);
     }
 
+    // Requisição do tipo GET para http://localhost:8080/produtos/categoria/frutas
+    @GetMapping("categoria/{slugCategoria}")
+    public List<Produto> recuperarProdutosPorSlugCategoria(@PathVariable("slugCategoria") String slugCategoria){
+	    return produtoService.recuperarProdutosPorSlugCategoria(slugCategoria);
+    }
+
     @PostMapping
     public Produto cadastraProduto(@RequestBody Produto produto) {
         return produtoService.cadastrarProduto(produto);
