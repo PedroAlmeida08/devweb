@@ -1,17 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
 import Produto from "../interfaces/Produto";
 
-const useRecuperarProdutoPorSlugCategoria = (slugCategoria?: string) => {
-  
-  const recuperarProdutoPorSlugCategoria = async (slugCategoria?: string): Promise<Produto[]> => {
-    const response = await fetch("http://localhost:8080/produtos/" + (slugCategoria ? "/categoria/" + slugCategoria : ""));
+const useRecuperarProdutoPorSlugCategoria = (slugCategororia?: string) => {
+  const recuperarProdutoPorSlugCategoria = async (
+    slugCategororia?: string
+  ): Promise<Produto[]> => {
+    const response = await fetch(
+      "http://localhost:8080/produtos" +
+        (slugCategororia ? "/categoria/" + slugCategororia : "")
+    );
     if (!response.ok) {
       if (response.status === 404) {
         throw new Error(await response.text());
       } else {
         throw new Error(
-          "Ocorreu um erro ao recuperar os produtos com slugCategoria = " +
-            slugCategoria +
+          "Ocorreu um erro ao recuperar os produtos com slugCategororia = " +
+            slugCategororia +
             ". Status code = " +
             response.status
         );
@@ -21,9 +25,11 @@ const useRecuperarProdutoPorSlugCategoria = (slugCategoria?: string) => {
   };
 
   return useQuery({
-    queryKey: ["produto", slugCategoria],
-    queryFn: () => recuperarProdutoPorSlugCategoria(slugCategoria),
-    staleTime: 10_000
+    queryKey: slugCategororia
+      ? ["produtos", "categoria", slugCategororia]
+      : ["produtos"],
+    queryFn: () => recuperarProdutoPorSlugCategoria(slugCategororia),
+    staleTime: 10_000,
   });
 };
 export default useRecuperarProdutoPorSlugCategoria;

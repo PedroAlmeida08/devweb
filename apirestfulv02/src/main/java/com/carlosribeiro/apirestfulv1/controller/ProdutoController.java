@@ -35,8 +35,8 @@ public class ProdutoController {
 
     // Requisição do tipo GET para http://localhost:8080/produtos/categoria/frutas
     @GetMapping("categoria/{slugCategoria}")
-    public List<Produto> recuperarProdutosPorSlugCategoria(@PathVariable("slugCategoria") String slugCategoria){
-	    return produtoService.recuperarProdutosPorSlugCategoria(slugCategoria);
+    public List<Produto> recuperarProdutosPorSlugCategoria(@PathVariable("slugCategoria") String slugCategoria) {
+        return produtoService.recuperarProdutosPorSlugCategoria(slugCategoria);
     }
 
     @PostMapping
