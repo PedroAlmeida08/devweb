@@ -1,8 +1,9 @@
 import { useParams } from "react-router-dom";
-import useRecuperarProdutosPorSlugCategoria from "../hooks/useRecuperarProdutoPorSlugCategoria"
+import useRecuperarProdutosPorSlugCategoria from "../hooks/useRecuperarProdutosPorSlugCategoria";
 import Card from "../components/Card";
 import { useEffect, useState } from "react";
 import Produto from "../interfaces/Produto";
+import CardsPlaceholderPage from "./CardsPlaceholderPage";
 
 export interface ProdCarrinho {
   idProduto: number;
@@ -18,9 +19,9 @@ const CardsPorSlugCategoriaPage = () => {
   console.log("carrinho = ", carrinho);
 
   useEffect(() => {
-    localStorage.setItem("carrinho", JSON.stringify(carrinho))
-  }, [carrinho])
-  
+    localStorage.setItem("carrinho", JSON.stringify(carrinho));
+  }, [carrinho]);
+
   const adicionarProduto = (produto: Produto) => {
     setCarrinho((prevCarrinho: ProdCarrinho[]) => {
       const existe = prevCarrinho.find((item) => item.idProduto === produto.id);
@@ -30,13 +31,15 @@ const CardsPorSlugCategoriaPage = () => {
         // houver no ponteiro que aponta para o vetor
         // existe.quantidade = existe.quantidade+1;
         // return previousCarrinho;
-        const novoCarrinho: ProdCarrinho[] = prevCarrinho
-          .map((item: ProdCarrinho) => item.idProduto === produto.id ? 
-            {idProduto: item.idProduto, quantidade: item.quantidade + 1} : item);
-        return novoCarrinho;    
-      }
-      else {
-        return [...prevCarrinho, {idProduto: produto.id, quantidade: 1}]
+        const novoCarrinho: ProdCarrinho[] = prevCarrinho.map(
+          (item: ProdCarrinho) =>
+            item.idProduto === produto.id
+              ? { idProduto: item.idProduto, quantidade: item.quantidade + 1 }
+              : item
+        );
+        return novoCarrinho;
+      } else {
+        return [...prevCarrinho, { idProduto: produto.id, quantidade: 1 }];
       }
     });
   };
@@ -50,12 +53,14 @@ const CardsPorSlugCategoriaPage = () => {
         // houver no ponteiro que aponta para o vetor
         // existe.quantidade = existe.quantidade+1;
         // return previousCarrinho;
-        const novoCarrinho: ProdCarrinho[] = prevCarrinho
-          .map((item: ProdCarrinho) => item.idProduto === produto.id ? 
-            {idProduto: item.idProduto, quantidade: item.quantidade - 1} : item);
-        return novoCarrinho.filter((item) => item.quantidade > 0);    
-      }
-      else {
+        const novoCarrinho: ProdCarrinho[] = prevCarrinho.map(
+          (item: ProdCarrinho) =>
+            item.idProduto === produto.id
+              ? { idProduto: item.idProduto, quantidade: item.quantidade - 1 }
+              : item
+        );
+        return novoCarrinho.filter((item) => item.quantidade > 0);
+      } else {
         throw new Error("Erro ao subtrair 1 de produto no carrinho.");
       }
     });
@@ -68,7 +73,7 @@ const CardsPorSlugCategoriaPage = () => {
     error: errorProdutos,
   } = useRecuperarProdutosPorSlugCategoria(slugCategoria);
 
-  if (carregandoProdutos) return <h6>Carregando produtos...</h6>;
+  if (carregandoProdutos) return <CardsPlaceholderPage />;
   if (errorProdutos) throw errorProdutos;
 
   const produtosNoCarrinho: (ProdCarrinho | null)[] = [];
