@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import useRecuperarProdutosPorSlugCategoria from "../hooks/useRecuperarProdutoPorSlugCategoria";
+import useRecuperarProdutosPorSlugCategoria from "../hooks/useRecuperarProdutoPorSlugCategoria"
 import Card from "../components/Card";
 import { useEffect, useState } from "react";
 import Produto from "../interfaces/Produto";
@@ -14,56 +14,49 @@ const CardsPorSlugCategoriaPage = () => {
     const itensDeCarrinho = localStorage.getItem("carrinho");
     return itensDeCarrinho ? JSON.parse(itensDeCarrinho) : [];
   });
+
   console.log("carrinho = ", carrinho);
 
   useEffect(() => {
-    localStorage.setItem("carrinho", JSON.stringify(carrinho));
-  }, [carrinho]);
-
+    localStorage.setItem("carrinho", JSON.stringify(carrinho))
+  }, [carrinho])
+  
   const adicionarProduto = (produto: Produto) => {
-    setCarrinho((previousCarrinho: ProdCarrinho[]) => {
-      const existe = previousCarrinho.find((item) => {
-        item.idProduto === produto.id;
-      });
+    setCarrinho((prevCarrinho: ProdCarrinho[]) => {
+      const existe = prevCarrinho.find((item) => item.idProduto === produto.id);
       if (existe) {
         // Isso não funciona, por conta do useState()
         // useState() não reconhece que houve mudança no vetor se não
         // houver no ponteiro que aponta para o vetor
         // existe.quantidade = existe.quantidade+1;
         // return previousCarrinho;
-        const novoCarrinho: ProdCarrinho[] = previousCarrinho.map(
-          (item: ProdCarrinho) =>
-            item.idProduto === produto.id
-              ? { idProduto: item.idProduto, quantidade: item.quantidade + 1 }
-              : item
-        );
-        return novoCarrinho;
-      } else {
-        return [...previousCarrinho, { idProduto: produto.id, quantidade: 1 }];
+        const novoCarrinho: ProdCarrinho[] = prevCarrinho
+          .map((item: ProdCarrinho) => item.idProduto === produto.id ? 
+            {idProduto: item.idProduto, quantidade: item.quantidade + 1} : item);
+        return novoCarrinho;    
+      }
+      else {
+        return [...prevCarrinho, {idProduto: produto.id, quantidade: 1}]
       }
     });
   };
 
   const subtrairProduto = (produto: Produto) => {
-    setCarrinho((previousCarrinho: ProdCarrinho[]) => {
-      const existe = previousCarrinho.find((item) => {
-        item.idProduto === produto.id;
-      });
+    setCarrinho((prevCarrinho: ProdCarrinho[]) => {
+      const existe = prevCarrinho.find((item) => item.idProduto === produto.id);
       if (existe) {
         // Isso não funciona, por conta do useState()
         // useState() não reconhece que houve mudança no vetor se não
         // houver no ponteiro que aponta para o vetor
-        // existe.quantidade = existe.quantidade-1;
+        // existe.quantidade = existe.quantidade+1;
         // return previousCarrinho;
-        const novoCarrinho: ProdCarrinho[] = previousCarrinho.map(
-          (item: ProdCarrinho) =>
-            item.idProduto === produto.id
-              ? { idProduto: item.idProduto, quantidade: item.quantidade - 1 }
-              : item
-        );
-        return novoCarrinho.filter((item) => item.quantidade > 0);
-      } else {
-        throw new Error("Erro ao subtrair 1 de produto no carrinho");
+        const novoCarrinho: ProdCarrinho[] = prevCarrinho
+          .map((item: ProdCarrinho) => item.idProduto === produto.id ? 
+            {idProduto: item.idProduto, quantidade: item.quantidade - 1} : item);
+        return novoCarrinho.filter((item) => item.quantidade > 0);    
+      }
+      else {
+        throw new Error("Erro ao subtrair 1 de produto no carrinho.");
       }
     });
   };
@@ -78,13 +71,15 @@ const CardsPorSlugCategoriaPage = () => {
   if (carregandoProdutos) return <h6>Carregando produtos...</h6>;
   if (errorProdutos) throw errorProdutos;
 
-  const produtosNoCarrinho: ProdCarrinho[] | null = [];
+  const produtosNoCarrinho: (ProdCarrinho | null)[] = [];
   produtos.forEach((produto) => {
     const prodCarrinho = carrinho.find(
       (item: ProdCarrinho) => item.idProduto === produto.id
     );
     produtosNoCarrinho.push(prodCarrinho ? prodCarrinho : null);
   });
+
+  console.log("produtos no carrinho = ", produtosNoCarrinho);
 
   return (
     <>

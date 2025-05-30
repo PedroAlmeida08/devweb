@@ -33,27 +33,28 @@ const Card = ({
         <div
           style={produtoNoCarrinho ? { display: "block" } : { display: "none" }}
         >
-          <div className="btn-group" role="group" aria-label="Basic example">
+          <div className="btn-group w-100">
             <button
               onClick={() => subtrairProduto(produto)}
               type="button"
-              className="btn btn-secondary btn-small w-100"
+              className="btn btn-secondary btn-sm"
             >
               -
             </button>
-            <button type="button" className="btn btn-secondary btn-small w-100">
+            <button type="button" className="btn btn-secondary btn-sm">
               {produtoNoCarrinho?.quantidade}
             </button>
             <button
               onClick={() => adicionarProduto(produto)}
               type="button"
-              className="btn btn-secondary btn-small w-100"
+              className="btn btn-secondary btn-sm"
             >
               +
             </button>
           </div>
         </div>
         <button
+          style={produtoNoCarrinho ? { display: "none" } : { display: "block" }}
           onClick={() => adicionarProduto(produto)}
           type="button"
           className="btn btn-success btn-sm w-100"
@@ -64,5 +65,4 @@ const Card = ({
     </div>
   );
 };
-
 export default Card;
