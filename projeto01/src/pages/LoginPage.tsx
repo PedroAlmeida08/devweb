@@ -1,14 +1,14 @@
-import useProdutoStore from "../store/ProdutoStore"
+import LoginForm from "../components/LoginForm";
 
 const LoginPage = () => {
-  const tamanho = useProdutoStore((s) => s.tamanho);
-  const setTamanho = useProdutoStore((s) => s.setTamanho);
-  
   return (
     <>
-      <h5>Login Page - Tamanho = {tamanho}</h5>
-      <button onClick={() => {setTamanho(8)}}>Mudar tamanho</button>
+      <div className="mb-4">
+        <h5>Página de Login</h5>
+        <hr className="mt-1" />
+      </div>
+      <LoginForm />
     </>
-  )
-}
-export default LoginPage
+  );
+};
+export default LoginPage;

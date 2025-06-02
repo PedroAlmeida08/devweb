@@ -40,8 +40,8 @@ const NavBar = () => {
               </NavLink>
             </li>
             <li className="nav-item">
-              <NavLink className="nav-link" to="/contatos">
-                Contatos
+              <NavLink className="nav-link" to="/favoritos">
+                Favoritos
               </NavLink>
             </li>
           </ul>
