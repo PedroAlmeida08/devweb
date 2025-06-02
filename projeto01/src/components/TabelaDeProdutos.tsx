@@ -1,14 +1,45 @@
 import dayjs from "dayjs";
 import Produto from "../interfaces/Produto";
 import { Link } from "react-router-dom";
+import useProdutoStore from "../store/ProdutoStore";
+import useRecuperarProdutosComPaginacao from "../hooks/useRecuperarProdutosComPaginacao";
+import useRemoverProdutoPorId from "../hooks/useRemoverProdutoPorId";
 
- interface Props {
-     produtos: Produto[];
-     tratarRemocao: (id:number) => void;
- }
+const TabelaDeProdutos = () => {
+  //const TabelaDeProdutos = ({ produtos, tratarRemocao }: { produtos: Produto[], tratarRemocao: (id: number) => void }) => {
 
-  const TabelaDeProdutos = ({produtos, tratarRemocao}: Props) => {
-//const TabelaDeProdutos = ({ produtos, tratarRemocao }: { produtos: Produto[], tratarRemocao: (id: number) => void }) => {
+  const pagina = useProdutoStore((s) => s.pagina);
+  const tamanho = useProdutoStore((s) => s.tamanho);
+  const nome = useProdutoStore((s) => s.nome);
+
+  const setPagina = useProdutoStore((s) => s.setPagina);
+
+  const {
+    data: resultadoPaginado,
+    isPending: carregandoProdutos,
+    error: errorProdutos,
+  } = useRecuperarProdutosComPaginacao({
+    pagina: pagina.toString(),
+    tamanho: tamanho.toString(),
+    nome: nome,
+  });
+
+  if (carregandoProdutos)
+    return <p className="fw-bold">Carregando produtos...</p>;
+  if (errorProdutos) throw errorProdutos;
+
+  const produtos: Produto[] = resultadoPaginado.itens;
+
+  const { mutate: removerProduto, error: errorRemocaoProduto } =
+    useRemoverProdutoPorId();
+
+  if (errorRemocaoProduto) throw errorRemocaoProduto;
+
+  const tratarRemocao = (id: number) => {
+    removerProduto(id);
+    setPagina(0);
+  };
+
   return (
     <div className="table-responsive">
       <table className="table table-bordered table-sm table-hover table-striped">
@@ -27,7 +58,9 @@ import { Link } from "react-router-dom";
         <tbody>
           {produtos.map((produto) => (
             <tr key={produto.id}>
-              <td width="8%" className="text-center align-middle">{produto.id}</td>
+              <td width="8%" className="text-center align-middle">
+                {produto.id}
+              </td>
               <td width="13%" className="text-center align-middle">
                 <img
                   src={produto.imagem}
@@ -39,7 +72,12 @@ import { Link } from "react-router-dom";
                 {produto.categoria.nome}
               </td>
               <td width="17%" className="align-middle ps-3">
-                <Link style={{textDecoration: "none"}} to={"/produtos/" + produto.id}>{produto.nome}</Link>
+                <Link
+                  style={{ textDecoration: "none" }}
+                  to={"/produtos/" + produto.id}
+                >
+                  {produto.nome}
+                </Link>
               </td>
               <td width="13%" className="text-center align-middle">
                 {dayjs(produto.dataCadastro).format("DD/MM/YYYY")}
@@ -55,7 +93,11 @@ import { Link } from "react-router-dom";
                 })}
               </td>
               <td width="13%" className="text-center align-middle">
-                <button onClick = {()=> tratarRemocao(produto.id)} className="btn btn-danger btn-sm" type="button">
+                <button
+                  onClick={() => tratarRemocao(produto.id)}
+                  className="btn btn-danger btn-sm"
+                  type="button"
+                >
                   Remover
                 </button>
               </td>
@@ -64,12 +106,18 @@ import { Link } from "react-router-dom";
         </tbody>
         <tfoot>
           <tr>
-            <td className="text-center align-middle fw-bold" colSpan={5}>Total ...</td>
+            <td className="text-center align-middle fw-bold" colSpan={5}>
+              Total ...
+            </td>
             <td className="text-center align-middle fw-bold" colSpan={2}></td>
             <td className="text-center align-middle fw-bold">
-            {/* reduce percorre os produtos */}
+              {/* reduce percorre os produtos */}
               {produtos
-                .reduce((total, produto) => total + produto.qtdEstoque * produto.preco, 0)
+                .reduce(
+                  (total, produto) =>
+                    total + produto.qtdEstoque * produto.preco,
+                  0
+                )
                 .toLocaleString("pt-BR", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,

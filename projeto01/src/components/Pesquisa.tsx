@@ -1,10 +1,15 @@
 import { FormEvent, useRef } from "react";
+import useProdutoStore from "../store/ProdutoStore";
 
-interface Props {
-    tratarNome: (nome: string) => void;
-}
-const Pesquisa = ({tratarNome}: Props) => {
+const Pesquisa = () => {
   const nomeRef = useRef<HTMLInputElement>(null);
+  const setNome = useProdutoStore((s) => s.setNome);
+  const setPagina = useProdutoStore((s) => s.setPagina);
+
+  const tratarNome = (nome: string) => {
+    setNome(nome);
+    setPagina(0);
+  }
 
   return (
     <form
