@@ -6,8 +6,6 @@ import useRecuperarProdutosComPaginacao from "../hooks/useRecuperarProdutosComPa
 import useRemoverProdutoPorId from "../hooks/useRemoverProdutoPorId";
 
 const TabelaDeProdutos = () => {
-  //const TabelaDeProdutos = ({ produtos, tratarRemocao }: { produtos: Produto[], tratarRemocao: (id: number) => void }) => {
-
   const pagina = useProdutoStore((s) => s.pagina);
   const tamanho = useProdutoStore((s) => s.tamanho);
   const nome = useProdutoStore((s) => s.nome);
@@ -24,21 +22,20 @@ const TabelaDeProdutos = () => {
     nome: nome,
   });
 
-  if (carregandoProdutos)
-    return <p className="fw-bold">Carregando produtos...</p>;
-  if (errorProdutos) throw errorProdutos;
-
-  const produtos: Produto[] = resultadoPaginado.itens;
-
   const { mutate: removerProduto, error: errorRemocaoProduto } =
     useRemoverProdutoPorId();
-
-  if (errorRemocaoProduto) throw errorRemocaoProduto;
 
   const tratarRemocao = (id: number) => {
     removerProduto(id);
     setPagina(0);
   };
+
+  if (carregandoProdutos)
+    return <p className="fw-bold">Carregando produtos...</p>;
+  if (errorProdutos) throw errorProdutos;
+  if (errorRemocaoProduto) throw errorRemocaoProduto;
+
+  const produtos: Produto[] = resultadoPaginado.itens;
 
   return (
     <div className="table-responsive">
@@ -50,7 +47,7 @@ const TabelaDeProdutos = () => {
             <th className="text-center align-middle">Categoria</th>
             <th className="text-center align-middle">Nome</th>
             <th className="text-center align-middle">Data de Cadastro</th>
-            <th className="className text-center align-middle"> Quantidade</th>
+            <th className="text-center align-middle">Quantidade</th>
             <th className="text-center align-middle">Preço</th>
             <th className="text-center align-middle">Ação</th>
           </tr>
@@ -107,11 +104,10 @@ const TabelaDeProdutos = () => {
         <tfoot>
           <tr>
             <td className="text-center align-middle fw-bold" colSpan={5}>
-              Total ...
+              Total...
             </td>
-            <td className="text-center align-middle fw-bold" colSpan={2}></td>
-            <td className="text-center align-middle fw-bold">
-              {/* reduce percorre os produtos */}
+            <td className="text-center align-middle fw-bold" colSpan={2}>
+              R$ {/* reduce percorre os produtos */}
               {produtos
                 .reduce(
                   (total, produto) =>
@@ -124,6 +120,7 @@ const TabelaDeProdutos = () => {
                   useGrouping: true,
                 })}
             </td>
+            <td></td>
           </tr>
         </tfoot>
       </table>
